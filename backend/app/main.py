@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
 from app.models import models
+from app.routes import auth, students, smart
 
-# Create all tables in database
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -12,7 +12,6 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Allow React frontend to talk to this backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -20,6 +19,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth.router)
+app.include_router(students.router)
+app.include_router(smart.router)
 
 @app.get("/")
 def root():

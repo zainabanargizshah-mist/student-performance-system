@@ -1,0 +1,142 @@
+{
+  "Backend Developer": {
+    "must_have": ["Python", "REST APIs", "SQL", "DSA", "OOP", "Git"],
+    "good_to_have": ["Docker", "AWS", "System Design", "PostgreSQL", "Linux"]
+  },
+  "Frontend Developer": {
+    "must_have": ["HTML", "CSS", "JavaScript", "React", "Git"],
+    "good_to_have": ["TypeScript", "Redux", "Testing", "UI/UX Design"]
+  },
+  "Full Stack Developer": {
+    "must_have": ["Python", "JavaScript", "React", "SQL", "Git", "OOP"],
+    "good_to_have": ["Docker", "AWS", "TypeScript", "Linux", "CI/CD"]
+  },
+  "Data Analyst": {
+    "must_have": ["SQL", "Python", "Statistics", "Data Analysis", "Excel"],
+    "good_to_have": ["Pandas", "Tableau", "Power BI", "Machine Learning"]
+  },
+  "Data Scientist": {
+    "must_have": ["Python", "Machine Learning", "Statistics", "Data Analysis", "Pandas"],
+    "good_to_have": ["Deep Learning", "TensorFlow", "Big Data", "SQL", "Research"]
+  },
+  "ML Engineer": {
+    "must_have": ["Python", "Machine Learning", "Deep Learning", "Statistics", "Git"],
+    "good_to_have": ["TensorFlow", "PyTorch", "Docker", "AWS", "MLOps"]
+  },
+  "DevOps Engineer": {
+    "must_have": ["Linux", "Docker", "Git", "Networking", "Shell Scripting"],
+    "good_to_have": ["AWS", "Kubernetes", "CI/CD", "Python", "Monitoring"]
+  },
+  "Cloud Engineer": {
+    "must_have": ["AWS", "Cloud", "Linux", "Networking", "Docker"],
+    "good_to_have": ["Azure", "Kubernetes", "Security", "Python", "DevOps"]
+  },
+  "Cybersecurity Analyst": {
+    "must_have": ["Security", "Networking", "Linux", "Cryptography", "Ethical Hacking"],
+    "good_to_have": ["Python", "Forensics", "Penetration Testing", "SIEM"]
+  },
+  "Product Manager": {
+    "must_have": ["Project Management", "Communication", "Agile", "Leadership", "Analytics"],
+    "good_to_have": ["SQL", "UI/UX Design", "Market Research", "Roadmapping"]
+  },
+  "UI/UX Designer": {
+    "must_have": ["UI/UX Design", "Figma", "Communication", "Web Development", "Prototyping"],
+    "good_to_have": ["HTML", "CSS", "User Research", "Design Thinking"]
+  },
+  "Embedded Systems Engineer": {
+    "must_have": ["C", "Embedded Systems", "Hardware", "IoT", "Microprocessors"],
+    "good_to_have": ["Assembly", "RTOS", "Python", "Electronics", "Linux"]
+  },
+  "Network Engineer": {
+    "must_have": ["Networking", "TCP/IP", "Security", "Protocols", "Linux"],
+    "good_to_have": ["Cloud", "Docker", "Python", "Network Design", "Cisco"]
+  },
+  "Game Developer": {
+    "must_have": ["C++", "OOP", "Mathematics", "Problem Solving", "Graphics"],
+    "good_to_have": ["Unity", "OpenGL", "Physics", "Game Design", "Python"]
+  },
+  "AI Engineer": {
+    "must_have": ["Python", "Machine Learning", "Deep Learning", "Mathematics", "DSA"],
+    "good_to_have": ["TensorFlow", "PyTorch", "NLP", "Computer Vision", "MLOps"]
+  },
+  "Prompt Engineer": {
+    "must_have": ["AI", "Python", "Communication", "Problem Solving", "NLP"],
+    "good_to_have": ["Machine Learning", "API Integration", "Research", "Data Analysis"]
+  },
+  "MLOps Engineer": {
+    "must_have": ["Python", "Machine Learning", "Docker", "Linux", "Git"],
+    "good_to_have": ["Kubernetes", "AWS", "CI/CD", "Monitoring", "Data Engineering"]
+  },
+  "Data Engineer": {
+    "must_have": ["Python", "SQL", "Big Data", "Data Pipelines", "Linux"],
+    "good_to_have": ["Spark", "Hadoop", "AWS", "Kafka", "Docker"]
+  },
+  "Blockchain Developer": {
+    "must_have": ["DSA", "Cryptography", "OOP", "Problem Solving", "JavaScript"],
+    "good_to_have": ["Solidity", "Web3", "Python", "Networking", "Security"]
+  },
+  "AR/VR Developer": {
+    "must_have": ["C++", "Mathematics", "Graphics", "OOP", "Problem Solving"],
+    "good_to_have": ["Unity", "OpenGL", "3D Modeling", "Python", "Game Design"]
+  },
+  "Computer Vision Engineer": {
+    "must_have": ["Python", "Deep Learning", "Mathematics", "Machine Learning", "OpenCV"],
+    "good_to_have": ["TensorFlow", "PyTorch", "C++", "DSA", "Data Analysis"]
+  },
+  "NLP Engineer": {
+    "must_have": ["Python", "Machine Learning", "Deep Learning", "Statistics", "NLP"],
+    "good_to_have": ["TensorFlow", "PyTorch", "Linguistics", "Data Analysis", "Research"]
+  },
+  "Robotics Engineer": {
+    "must_have": ["C++", "Python", "Embedded Systems", "Mathematics", "Electronics"],
+    "good_to_have": ["ROS", "Machine Learning", "IoT", "Control Systems", "Linux"]
+  },
+  "Site Reliability Engineer": {
+    "must_have": ["Linux", "Networking", "Docker", "Python", "Monitoring"],
+    "good_to_have": ["Kubernetes", "AWS", "CI/CD", "Shell Scripting", "Security"]
+  },
+  "Security Engineer": {
+    "must_have": ["Security", "Networking", "Linux", "Cryptography", "Python"],
+    "good_to_have": ["Penetration Testing", "Docker", "Cloud", "Forensics", "SIEM"]
+  },
+  "Database Administrator": {
+    "must_have": ["SQL", "Database Design", "PostgreSQL", "MySQL", "Linux"],
+    "good_to_have": ["NoSQL", "Python", "Performance Tuning", "Backup", "Cloud"]
+  },
+  "iOS Developer": {
+    "must_have": ["Swift", "OOP", "Mobile Development", "DSA", "Git"],
+    "good_to_have": ["Objective-C", "Xcode", "UI/UX Design", "Testing", "AWS"]
+  },
+  "Android Developer": {
+    "must_have": ["Android", "Java", "Kotlin", "OOP", "Mobile Development"],
+    "good_to_have": ["React Native", "Firebase", "Testing", "UI/UX Design", "Git"]
+  },
+  "React Native Developer": {
+    "must_have": ["JavaScript", "React", "Mobile Development", "OOP", "Git"],
+    "good_to_have": ["TypeScript", "Redux", "Android", "iOS", "REST APIs"]
+  },
+  "Quantum Computing Engineer": {
+    "must_have": ["Mathematics", "Physics", "Python", "Linear Algebra", "Problem Solving"],
+    "good_to_have": ["Qiskit", "Research", "Algorithms", "Statistics", "C++"]
+  },
+  "Digital Marketing Analyst": {
+    "must_have": ["Analytics", "Communication", "Statistics", "Data Analysis", "SQL"],
+    "good_to_have": ["Python", "Excel", "Tableau", "SEO", "Marketing"]
+  },
+  "Business Analyst": {
+    "must_have": ["Analytics", "Communication", "SQL", "Project Management", "Excel"],
+    "good_to_have": ["Python", "Tableau", "Power BI", "Agile", "Data Analysis"]
+  },
+  "Technical Writer": {
+    "must_have": ["Communication", "Documentation", "Research", "Professional Skills", "Git"],
+    "good_to_have": ["HTML", "Markdown", "API Documentation", "Python", "Testing"]
+  },
+  "QA Engineer": {
+    "must_have": ["Testing", "Python", "DSA", "Problem Solving", "Git"],
+    "good_to_have": ["Selenium", "API Testing", "CI/CD", "SQL", "Agile"]
+  },
+  "Scrum Master": {
+    "must_have": ["Agile", "Project Management", "Communication", "Leadership", "Problem Solving"],
+    "good_to_have": ["Jira", "Scrum", "Kanban", "Risk Management", "Coaching"]
+  }
+}
