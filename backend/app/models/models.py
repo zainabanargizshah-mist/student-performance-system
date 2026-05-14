@@ -34,6 +34,7 @@ class Student(Base):
     events = relationship("Event", back_populates="student", cascade="all, delete-orphan")
     dream_jobs = relationship("DreamJob", back_populates="student", cascade="all, delete-orphan")
     certifications = relationship("Certification", back_populates="student", cascade="all, delete-orphan")
+    custom_skills = relationship("CustomSkill", back_populates="student", cascade="all, delete-orphan")
 
 # ─── SUBJECTS TABLE ─────────────────────────────────────────
 class Subject(Base):
@@ -112,3 +113,15 @@ class Certification(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     student = relationship("Student", back_populates="certifications")
+
+# ─── CUSTOM SKILLS TABLE ────────────────────────────────────
+class CustomSkill(Base):
+    __tablename__ = "custom_skills"
+
+    id = Column(Integer, primary_key=True, index=True)
+    student_id = Column(Integer, ForeignKey("students.id"))
+    name = Column(String, nullable=False)
+    category = Column(String, default="Other")
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    student = relationship("Student", back_populates="custom_skills")

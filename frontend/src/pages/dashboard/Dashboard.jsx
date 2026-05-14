@@ -1,53 +1,64 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { studentAPI, smartAPI, calendarAPI } from '../../utils/api'
 import { CardSkeleton } from '../../components/Skeleton'
 import { formatDate } from '../../utils/helpers'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts'
+import { useLocation } from 'react-router-dom'
+import Navbar from '../../components/Navbar'
+import Sidebar from '../../components/Sidebar'
 
 const Dashboard = () => {
   const { user } = useAuth()
+  const location = useLocation()
   const [profile, setProfile] = useState(null)
   const [cgpa, setCgpa] = useState(null)
   const [analytics, setAnalytics] = useState(null)
   const [upcomingExams, setUpcomingExams] = useState([])
   const [loading, setLoading] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // GPA Goal state
   const [gpaGoal, setGpaGoal] = useState(9.0)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const profileRes = await studentAPI.getProfile()
-        setProfile(profileRes.data)
-        const [cgpaRes, analyticsRes, examsRes] = await Promise.all([
-          studentAPI.getCGPA(),
-          smartAPI.getAnalytics(),
-          calendarAPI.getUpcomingExams(),
-        ])
-        setCgpa(cgpaRes.data)
-        setAnalytics(analyticsRes.data)
-        setUpcomingExams(examsRes.data.exams || [])
-      } catch (err) {
-        console.log('No profile yet')
-      } finally {
-        setLoading(false)
-      }
+  const fetchData = useCallback(async () => {
+    try {
+      const profileRes = await studentAPI.getProfile()
+      setProfile(profileRes.data)
+      const [cgpaRes, analyticsRes, examsRes] = await Promise.all([
+        studentAPI.getCGPA(),
+        smartAPI.getAnalytics(),
+        calendarAPI.getUpcomingExams(),
+      ])
+      setCgpa(cgpaRes.data)
+      setAnalytics(analyticsRes.data)
+      setUpcomingExams(examsRes.data.exams || [])
+    } catch (err) {
+      console.log('No profile yet')
+    } finally {
+      setLoading(false)
     }
-    fetchData()
   }, [])
+
+  // Re-fetch every time the user navigates to the dashboard
+  useEffect(() => {
+    fetchData()
+  }, [location.key, fetchData])
 
   if (loading) {
     return (
-      <div className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          {[...Array(4)].map((_, i) => <CardSkeleton key={i} />)}
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2"><CardSkeleton /></div>
-          <div><CardSkeleton /></div>
-        </div>
+      <div className="min-h-screen bg-slate-50">
+        <Navbar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <main className="ml-0 lg:ml-60 pt-14 p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            {[...Array(4)].map((_, i) => <CardSkeleton key={i} />)}
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2"><CardSkeleton /></div>
+            <div><CardSkeleton /></div>
+          </div>
+        </main>
       </div>
     )
   }
@@ -57,7 +68,11 @@ const Dashboard = () => {
   const goalProgress = Math.min(100, Math.max(0, (currentCgpa / gpaGoal) * 100))
 
   return (
-    <div className="p-6 max-w-7xl mx-auto animate-fade-in-up">
+    <div className="min-h-screen bg-slate-50">
+      <Navbar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <main className="ml-0 lg:ml-60 pt-14 p-6">
+      <div className="max-w-7xl mx-auto animate-fade-in-up">
       {/* Welcome header */}
       <div className="mb-8 flex justify-between items-end">
         <div>
@@ -320,6 +335,8 @@ const Dashboard = () => {
           )}
         </>
       )}
+      </div>
+      </main>
     </div>
   )
 }

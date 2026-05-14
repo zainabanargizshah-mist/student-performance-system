@@ -25,6 +25,7 @@ const GradesPage = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [subjectToDelete, setSubjectToDelete] = useState(null)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const [profileForm, setProfileForm] = useState({
     full_name: '', roll_number: '', degree: '', branch: '', current_semester: 1
@@ -166,9 +167,9 @@ const GradesPage = () => {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
-      <Sidebar />
-      <main className="ml-56 pt-14 p-8">
+      <Navbar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <main className="ml-0 lg:ml-60 pt-14 p-8">
         {/* Header Section */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in-up">
           <div>

@@ -10,10 +10,19 @@ const CalendarPage = () => {
   const [upcomingExams, setUpcomingExams] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [form, setForm] = useState({
     title: '', event_type: 'exam', date: '',
     subject_name: '', exam_hall: '', duration_minutes: 180
   })
+
+  // Helper: format a date as YYYY-MM-DD in local timezone (avoids UTC shift)
+  const toLocalDateStr = (d) => {
+    const year = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
 
   // For monthly grid
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -91,9 +100,12 @@ const CalendarPage = () => {
 
     // Days of the month
     for (let d = 1; d <= daysInMonth; d++) {
-      const dateStr = new Date(year, month, d).toISOString().split('T')[0]
-      const dayEvents = events.filter(e => e.date.startsWith(dateStr))
-      const isToday = new Date().toISOString().split('T')[0] === dateStr
+      const dateStr = toLocalDateStr(new Date(year, month, d))
+      const dayEvents = events.filter(e => {
+        const eventDate = new Date(e.date)
+        return toLocalDateStr(eventDate) === dateStr
+      })
+      const isToday = toLocalDateStr(new Date()) === dateStr
 
       days.push(
         <div key={d} className={`h-24 rounded-xl border p-2 flex flex-col transition-colors hover:bg-indigo-50/30 ${isToday ? 'border-indigo-400 bg-indigo-50/10 shadow-sm' : 'border-gray-100 bg-white'}`}>
@@ -126,9 +138,9 @@ const CalendarPage = () => {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
-      <Sidebar />
-      <main className="ml-56 pt-14 p-8">
+      <Navbar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <main className="ml-0 lg:ml-60 pt-14 p-8">
 
         {/* Header Section */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in-up">

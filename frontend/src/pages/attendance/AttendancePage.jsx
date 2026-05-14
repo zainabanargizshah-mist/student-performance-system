@@ -12,6 +12,7 @@ const AttendancePage = () => {
   const [loading, setLoading] = useState(true)
   const [fetchingData, setFetchingData] = useState(false)
   const [showForm, setShowForm] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [form, setForm] = useState({
     subject_id: '', total_classes: '', attended_classes: ''
   })
@@ -27,12 +28,19 @@ const AttendancePage = () => {
       const profileRes = await studentAPI.getProfile().catch(() => ({ data: null }))
       if (profileRes.data) {
         setProfile(profileRes.data)
-        const [attRes, subRes] = await Promise.all([
+        // Load subjects from ALL semesters so any subject can have attendance tracked
+        const subjectPromises = []
+        for (let sem = 1; sem <= profileRes.data.current_semester; sem++) {
+          subjectPromises.push(studentAPI.getSubjects(sem))
+        }
+        const [attRes, ...subjectResults] = await Promise.all([
           studentAPI.getAttendance(),
-          studentAPI.getSubjects(profileRes.data.current_semester)
+          ...subjectPromises
         ])
         setAttendance(attRes.data)
-        setSubjects(subRes.data)
+        // Merge all semesters' subjects into one flat list
+        const allSubjects = subjectResults.flatMap(res => res.data)
+        setSubjects(allSubjects)
       }
     } catch (err) {
       console.error(err)
@@ -84,9 +92,9 @@ const AttendancePage = () => {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
-      <Sidebar />
-      <main className="ml-56 pt-14 p-8">
+      <Navbar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <main className="ml-0 lg:ml-60 pt-14 p-8">
         
         {/* Header Section */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in-up">

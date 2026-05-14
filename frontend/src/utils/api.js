@@ -63,6 +63,8 @@ export const studentAPI = {
 
 export const smartAPI = {
   getSkills: () => api.get('/smart/skills'),
+  addSkill: (data) => api.post('/smart/skills', data),
+  deleteSkill: (id) => api.delete(`/smart/skills/${id}`),
   addDreamJob: (data) => api.post('/smart/dream-jobs', data),
   getDreamJobs: () => api.get('/smart/dream-jobs'),
   getAnalytics: () => api.get('/smart/analytics'),

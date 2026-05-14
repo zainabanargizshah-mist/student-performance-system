@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.auth import get_current_user
-from app.models.models import User, Student, Subject, DreamJob, Certification
-from app.schemas.schemas import DreamJobCreate, DreamJobResponse
+from app.models.models import User, Student, Subject, DreamJob, Certification, CustomSkill
+from app.schemas.schemas import DreamJobCreate, DreamJobResponse, CustomSkillCreate, CustomSkillResponse
 from typing import List
 import json
 import os
@@ -19,7 +19,7 @@ with open(os.path.join(BASE_DIR, "skills_map.json")) as f:
 with open(os.path.join(BASE_DIR, "jobs_map.json")) as f:
     JOBS_MAP = json.load(f)
 
-# ─── HELPER: Get student skills from subjects + certifications ─
+# ─── HELPER: Get student skills from subjects + certifications + custom ─
 def get_student_skills(student_id: int, db: Session) -> set:
     # Skills from passed subjects
     subjects = db.query(Subject).filter(
@@ -40,6 +40,13 @@ def get_student_skills(student_id: int, db: Session) -> set:
         if cert.skills_gained:
             cert_skills = [s.strip() for s in cert.skills_gained.split(",")]
             skills.update(cert_skills)
+
+    # Skills from custom skills
+    custom_skills = db.query(CustomSkill).filter(
+        CustomSkill.student_id == student_id
+    ).all()
+    for cs in custom_skills:
+        skills.add(cs.name)
 
     return skills
 
@@ -88,6 +95,9 @@ def get_skills(
     certifications = db.query(Certification).filter(
         Certification.student_id == student.id
     ).all()
+    custom_skills_db = db.query(CustomSkill).filter(
+        CustomSkill.student_id == student.id
+    ).all()
 
     # Skills breakdown by subject
     skill_breakdown = []
@@ -118,8 +128,64 @@ def get_skills(
     return {
         "total_skills": len(skills),
         "all_skills": sorted(list(skills)),
-        "breakdown_by_subject": skill_breakdown
+        "breakdown_by_subject": skill_breakdown,
+        "custom_skills": [
+            {"id": cs.id, "name": cs.name, "category": cs.category, "created_at": str(cs.created_at)}
+            for cs in custom_skills_db
+        ]
     }
+
+# ─── ADD CUSTOM SKILL ───────────────────────────────────────
+@router.post("/skills", status_code=201)
+def add_custom_skill(
+    data: CustomSkillCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    student = db.query(Student).filter(Student.user_id == current_user.id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Profile not found")
+
+    # Check for duplicate
+    existing = db.query(CustomSkill).filter(
+        CustomSkill.student_id == student.id,
+        CustomSkill.name == data.name
+    ).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Skill already exists")
+
+    skill = CustomSkill(
+        student_id=student.id,
+        name=data.name,
+        category=data.category or "Other"
+    )
+    db.add(skill)
+    db.commit()
+    db.refresh(skill)
+
+    return {"id": skill.id, "name": skill.name, "category": skill.category}
+
+# ─── DELETE CUSTOM SKILL ─────────────────────────────────────
+@router.delete("/skills/{skill_id}")
+def delete_custom_skill(
+    skill_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    student = db.query(Student).filter(Student.user_id == current_user.id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Profile not found")
+
+    skill = db.query(CustomSkill).filter(
+        CustomSkill.id == skill_id,
+        CustomSkill.student_id == student.id
+    ).first()
+    if not skill:
+        raise HTTPException(status_code=404, detail="Skill not found")
+
+    db.delete(skill)
+    db.commit()
+    return {"message": "Skill deleted successfully"}
 
 # ─── DREAM JOBS ──────────────────────────────────────────────
 @router.post("/dream-jobs", status_code=201)

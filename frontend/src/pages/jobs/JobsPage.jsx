@@ -11,6 +11,7 @@ const JobsPage = () => {
   const [loading, setLoading] = useState(true)
   const [fetchingData, setFetchingData] = useState(false)
   const [showForm, setShowForm] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [selectedJob, setSelectedJob] = useState('')
   const [adding, setAdding] = useState(false)
 
@@ -80,9 +81,9 @@ const JobsPage = () => {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
-      <Sidebar />
-      <main className="ml-56 pt-14 p-8">
+      <Navbar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <main className="ml-0 lg:ml-60 pt-14 p-8">
 
         {/* Header */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in-up">

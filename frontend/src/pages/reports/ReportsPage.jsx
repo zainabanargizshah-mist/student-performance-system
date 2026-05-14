@@ -6,6 +6,7 @@ import Sidebar from '../../components/Sidebar'
 
 const ReportsPage = () => {
   const [downloading, setDownloading] = useState('')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const handleDownload = async (type) => {
     setDownloading(type)
@@ -64,9 +65,9 @@ const ReportsPage = () => {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
-      <Sidebar />
-      <main className="ml-56 pt-14 p-8">
+      <Navbar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <main className="ml-0 lg:ml-60 pt-14 p-8">
 
         {/* Header Section */}
         <div className="mb-10 animate-fade-in-up">

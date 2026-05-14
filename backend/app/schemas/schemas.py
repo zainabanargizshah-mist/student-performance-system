@@ -151,3 +151,17 @@ class CertificationResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+# ─── CUSTOM SKILL SCHEMAS ────────────────────────────────────
+class CustomSkillCreate(BaseModel):
+    name: str
+    category: Optional[str] = "Other"
+
+class CustomSkillResponse(BaseModel):
+    id: int
+    name: str
+    category: str
+    created_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
