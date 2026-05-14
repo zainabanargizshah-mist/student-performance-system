@@ -30,5 +30,9 @@ coverage/
 .pytest_cache/
 htmlcov/
 
+# Database
+*.sqlite
+*.sqlite3
+
 # Misc
 *.log
