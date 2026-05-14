@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.auth import get_current_user
-from app.models.models import User, Student, Subject, DreamJob
+from app.models.models import User, Student, Subject, DreamJob, Certification
 from app.schemas.schemas import DreamJobCreate, DreamJobResponse
 from typing import List
 import json
@@ -19,8 +19,9 @@ with open(os.path.join(BASE_DIR, "skills_map.json")) as f:
 with open(os.path.join(BASE_DIR, "jobs_map.json")) as f:
     JOBS_MAP = json.load(f)
 
-# ─── HELPER: Get student skills from subjects ────────────────
+# ─── HELPER: Get student skills from subjects + certifications ─
 def get_student_skills(student_id: int, db: Session) -> set:
+    # Skills from passed subjects
     subjects = db.query(Subject).filter(
         Subject.student_id == student_id,
         Subject.grade != "F"
@@ -30,6 +31,16 @@ def get_student_skills(student_id: int, db: Session) -> set:
         for key in SKILLS_MAP:
             if key.lower() in subject.name.lower():
                 skills.update(SKILLS_MAP[key])
+
+    # Skills from certifications
+    certifications = db.query(Certification).filter(
+        Certification.student_id == student_id
+    ).all()
+    for cert in certifications:
+        if cert.skills_gained:
+            cert_skills = [s.strip() for s in cert.skills_gained.split(",")]
+            skills.update(cert_skills)
+
     return skills
 
 # ─── HELPER: Calculate match % ───────────────────────────────
@@ -47,7 +58,7 @@ def calculate_match(student_skills: set, job_title: str) -> dict:
     missing_good = list(good_to_have - student_skills)
 
     # Must have = 70% weight, good to have = 30% weight
-    must_score = len(must_have & student_skills) / len(must_have) * 70
+    must_score = len(must_have & student_skills) / len(must_have) * 70 if must_have else 70
     good_score = len(good_to_have & student_skills) / len(good_to_have) * 30 if good_to_have else 30
 
     match_percentage = round(must_score + good_score, 1)
@@ -74,7 +85,11 @@ def get_skills(
         Subject.student_id == student.id,
         Subject.grade != "F"
     ).all()
+    certifications = db.query(Certification).filter(
+        Certification.student_id == student.id
+    ).all()
 
+    # Skills breakdown by subject
     skill_breakdown = []
     for subject in subjects:
         subject_skills = []
@@ -83,14 +98,26 @@ def get_skills(
                 subject_skills.extend(SKILLS_MAP[key])
         if subject_skills:
             skill_breakdown.append({
-                "subject": subject.name,
+                "source": subject.name,
+                "type": "subject",
                 "semester": subject.semester,
                 "skills": list(set(subject_skills))
             })
 
+    # Skills breakdown by certification
+    for cert in certifications:
+        if cert.skills_gained:
+            cert_skills = [s.strip() for s in cert.skills_gained.split(",")]
+            skill_breakdown.append({
+                "source": cert.name,
+                "type": "certification",
+                "platform": cert.platform,
+                "skills": cert_skills
+            })
+
     return {
         "total_skills": len(skills),
-        "all_skills": list(skills),
+        "all_skills": sorted(list(skills)),
         "breakdown_by_subject": skill_breakdown
     }
 
@@ -172,6 +199,8 @@ def get_analytics(
         raise HTTPException(status_code=404, detail="Profile not found")
 
     subjects = db.query(Subject).filter(Subject.student_id == student.id).all()
+    certifications = db.query(Certification).filter(Certification.student_id == student.id).all()
+
     if not subjects:
         return {"message": "No subjects found"}
 
@@ -200,6 +229,7 @@ def get_analytics(
         "total_subjects": len(subjects),
         "passed_subjects": len(passed),
         "failed_subjects": len(subjects) - len(passed),
+        "total_certifications": len(certifications),
         "best_subject": {"name": best.name, "marks": best.total_marks, "grade": best.grade} if best else None,
         "worst_subject": {"name": worst.name, "marks": worst.total_marks, "grade": worst.grade} if worst else None,
         "semester_performance": semester_sgpa,

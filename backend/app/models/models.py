@@ -29,12 +29,11 @@ class Student(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("User", back_populates="student")
-    subjects = relationship("Subject", back_populates="student")
-    attendance = relationship("Attendance", back_populates="student")
-    assignments = relationship("Assignment", back_populates="student")
-    events = relationship("Event", back_populates="student")
-    dream_jobs = relationship("DreamJob", back_populates="student")
-    certifications = relationship("Certification", back_populates="student")
+    subjects = relationship("Subject", back_populates="student", cascade="all, delete-orphan")
+    attendance = relationship("Attendance", back_populates="student", cascade="all, delete-orphan")
+    events = relationship("Event", back_populates="student", cascade="all, delete-orphan")
+    dream_jobs = relationship("DreamJob", back_populates="student", cascade="all, delete-orphan")
+    certifications = relationship("Certification", back_populates="student", cascade="all, delete-orphan")
 
 # ─── SUBJECTS TABLE ─────────────────────────────────────────
 class Subject(Base):
@@ -53,8 +52,7 @@ class Subject(Base):
     grade_points = Column(Float, default=0)
 
     student = relationship("Student", back_populates="subjects")
-    attendance = relationship("Attendance", back_populates="subject")
-    assignments = relationship("Assignment", back_populates="subject")
+    attendance = relationship("Attendance", back_populates="subject", cascade="all, delete-orphan")
 
 # ─── ATTENDANCE TABLE ───────────────────────────────────────
 class Attendance(Base):
@@ -71,23 +69,6 @@ class Attendance(Base):
     student = relationship("Student", back_populates="attendance")
     subject = relationship("Subject", back_populates="attendance")
 
-# ─── ASSIGNMENTS TABLE ──────────────────────────────────────
-class Assignment(Base):
-    __tablename__ = "assignments"
-
-    id = Column(Integer, primary_key=True, index=True)
-    student_id = Column(Integer, ForeignKey("students.id"))
-    subject_id = Column(Integer, ForeignKey("subjects.id"))
-    title = Column(String, nullable=False)
-    due_date = Column(DateTime(timezone=True))
-    submitted = Column(Boolean, default=False)
-    marks_obtained = Column(Float, default=0)
-    total_marks = Column(Float, default=0)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-
-    student = relationship("Student", back_populates="assignments")
-    subject = relationship("Subject", back_populates="assignments")
-
 # ─── EVENTS TABLE (Calendar) ────────────────────────────────
 class Event(Base):
     __tablename__ = "events"
@@ -95,7 +76,7 @@ class Event(Base):
     id = Column(Integer, primary_key=True, index=True)
     student_id = Column(Integer, ForeignKey("students.id"))
     title = Column(String, nullable=False)
-    event_type = Column(String)  # exam, holiday, assignment, reminder
+    event_type = Column(String)  # exam, reminder
     date = Column(DateTime(timezone=True))
     subject_name = Column(String)
     exam_hall = Column(String)
@@ -126,6 +107,7 @@ class Certification(Base):
     name = Column(String, nullable=False)
     platform = Column(String)
     skills_gained = Column(Text)
+    certificate_url = Column(String)
     completed_date = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

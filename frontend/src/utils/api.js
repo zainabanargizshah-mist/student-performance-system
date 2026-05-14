@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_BASE_URL = 'http://localhost:8000'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -39,20 +39,26 @@ export const authAPI = {
   },
   logout: () => api.post('/auth/logout'),
   getMe: () => api.get('/auth/me'),
+  changePassword: (data) => api.put('/auth/change-password', data),
 }
 
 export const studentAPI = {
   createProfile: (data) => api.post('/students/profile', data),
   getProfile: () => api.get('/students/profile'),
+  updateProfile: (data) => api.put('/students/profile', data),
   addSubject: (data) => api.post('/students/subjects', data),
   getSubjects: (semester) => api.get(`/students/subjects/${semester}`),
   updateSubject: (id, data) => api.put(`/students/subjects/${id}`, data),
+  deleteSubject: (id) => api.delete(`/students/subjects/${id}`),
   getCGPA: () => api.get('/students/cgpa'),
   getSGPA: (semester) => api.get(`/students/sgpa/${semester}`),
   addAttendance: (data) => api.post('/students/attendance', data),
   getAttendance: () => api.get('/students/attendance'),
-  addAssignment: (data) => api.post('/students/assignments', data),
-  getAssignments: () => api.get('/students/assignments'),
+  deleteAttendance: (id) => api.delete(`/students/attendance/${id}`),
+  addCertification: (data) => api.post('/students/certifications', data),
+  getCertifications: () => api.get('/students/certifications'),
+  updateCertification: (id, data) => api.put(`/students/certifications/${id}`, data),
+  deleteCertification: (id) => api.delete(`/students/certifications/${id}`),
 }
 
 export const smartAPI = {
@@ -70,7 +76,6 @@ export const calendarAPI = {
   getEventsByMonth: (year, month) => api.get(`/calendar/events/${year}/${month}`),
   getUpcomingExams: () => api.get('/calendar/upcoming-exams'),
   deleteEvent: (id) => api.delete(`/calendar/events/${id}`),
-  syncHolidays: () => api.post('/calendar/sync-holidays'),
 }
 
 export const reportsAPI = {

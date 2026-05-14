@@ -75,7 +75,7 @@ const RegisterPage = () => {
         )}
 
         {/* Form */}
-        <div className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">
               Full Name
@@ -85,7 +85,8 @@ const RegisterPage = () => {
               name="full_name"
               value={formData.full_name}
               onChange={handleChange}
-              placeholder="Zainaba Nargis"
+              placeholder="Your Full Name"
+              required
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             />
           </div>
@@ -100,6 +101,7 @@ const RegisterPage = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="you@email.com"
+              required
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             />
           </div>
@@ -114,6 +116,8 @@ const RegisterPage = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="••••••••"
+              required
+              minLength={6}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             />
           </div>
@@ -128,18 +132,20 @@ const RegisterPage = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="••••••••"
+              required
+              minLength={6}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             />
           </div>
 
           <button
-            onClick={handleSubmit}
+            type="submit"
             disabled={loading}
             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
           >
             {loading ? 'Creating account...' : 'Create account'}
           </button>
-        </div>
+        </form>
 
         {/* Login link */}
         <p className="text-center text-sm text-gray-500 mt-6">

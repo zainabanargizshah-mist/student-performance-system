@@ -19,6 +19,10 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     email: Optional[str] = None
 
+class ChangePassword(BaseModel):
+    current_password: str
+    new_password: str
+
 # ─── STUDENT SCHEMAS ─────────────────────────────────────────
 class StudentCreate(BaseModel):
     full_name: str
@@ -26,6 +30,13 @@ class StudentCreate(BaseModel):
     degree: str
     branch: str
     current_semester: int
+
+class StudentUpdate(BaseModel):
+    full_name: Optional[str] = None
+    roll_number: Optional[str] = None
+    degree: Optional[str] = None
+    branch: Optional[str] = None
+    current_semester: Optional[int] = None
 
 class StudentResponse(BaseModel):
     id: int
@@ -71,28 +82,12 @@ class AttendanceCreate(BaseModel):
 class AttendanceResponse(BaseModel):
     id: int
     subject_id: int
+    subject_name: Optional[str] = None
     total_classes: int
     attended_classes: int
     percentage: float
     is_shortage: bool
-
-    class Config:
-        from_attributes = True
-
-# ─── ASSIGNMENT SCHEMAS ──────────────────────────────────────
-class AssignmentCreate(BaseModel):
-    subject_id: int
-    title: str
-    due_date: datetime
-    total_marks: float
-
-class AssignmentResponse(BaseModel):
-    id: int
-    title: str
-    due_date: datetime
-    submitted: bool
-    marks_obtained: float
-    total_marks: float
+    classes_needed: Optional[int] = None
 
     class Config:
         from_attributes = True
@@ -135,14 +130,24 @@ class CertificationCreate(BaseModel):
     name: str
     platform: str
     skills_gained: str
+    certificate_url: Optional[str] = None
     completed_date: datetime
+
+class CertificationUpdate(BaseModel):
+    name: Optional[str] = None
+    platform: Optional[str] = None
+    skills_gained: Optional[str] = None
+    certificate_url: Optional[str] = None
+    completed_date: Optional[datetime] = None
 
 class CertificationResponse(BaseModel):
     id: int
     name: str
     platform: str
     skills_gained: str
+    certificate_url: Optional[str]
     completed_date: datetime
+    created_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True
