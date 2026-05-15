@@ -13,9 +13,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
+origins = [origin.strip() for origin in settings.ALLOWED_ORIGINS.split(",")]
+if "https://student-performance-frontend-2epi.onrender.com" not in origins:
+    origins.append("https://student-performance-frontend-2epi.onrender.com")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in settings.ALLOWED_ORIGINS.split(",")],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
