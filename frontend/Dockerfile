@@ -16,8 +16,11 @@ ENV VITE_API_URL=$VITE_API_URL
 # Build for production
 RUN npm run build
 
+# Copy serve config into dist
+COPY serve.json dist/
+
 # Install serve to run the built app
 RUN npm install -g serve
 
-# Serve the app
-CMD ["serve", "-s", "dist", "-l", "10000"]
+# Serve the app with config
+CMD ["serve", "dist", "-l", "10000", "-c", "../serve.json"]
