@@ -16,11 +16,5 @@ ENV VITE_API_URL=$VITE_API_URL
 # Build for production
 RUN npm run build
 
-# Copy serve config into dist for SPA routing
-COPY serve.json dist/serve.json
-
-# Install serve to run the built app
-RUN npm install -g serve
-
-# Serve the app - config is auto-detected from dist/serve.json
-CMD ["serve", "dist", "-l", "10000"]
+# Serve the app using the Express server
+CMD ["node", "server.js"]
