@@ -16,11 +16,11 @@ ENV VITE_API_URL=$VITE_API_URL
 # Build for production
 RUN npm run build
 
-# Copy serve config into dist
-COPY serve.json dist/
+# Copy serve config into dist for SPA routing
+COPY serve.json dist/serve.json
 
 # Install serve to run the built app
 RUN npm install -g serve
 
-# Serve the app with config
-CMD ["serve", "dist", "-l", "10000", "-c", "../serve.json"]
+# Serve the app - config is auto-detected from dist/serve.json
+CMD ["serve", "dist", "-l", "10000"]
