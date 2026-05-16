@@ -4,13 +4,14 @@ import { studentAPI, smartAPI, calendarAPI } from '../../utils/api'
 import { CardSkeleton } from '../../components/Skeleton'
 import { formatDate } from '../../utils/helpers'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
 import Sidebar from '../../components/Sidebar'
 
 const Dashboard = () => {
   const { user } = useAuth()
   const location = useLocation()
+  const navigate = useNavigate()
   const [profile, setProfile] = useState(null)
   const [cgpa, setCgpa] = useState(null)
   const [analytics, setAnalytics] = useState(null)
@@ -110,7 +111,7 @@ const Dashboard = () => {
             Add your student details and first semester subjects to get personalized insights and analytics.
           </p>
           <button
-            onClick={() => window.location.href = '/grades'}
+            onClick={() => navigate('/grades')}
             className="bg-indigo-600 text-white px-8 py-3 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-all hover:scale-105 shadow-md hover:shadow-lg"
           >
             Set up profile now
